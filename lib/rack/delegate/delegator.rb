@@ -7,14 +7,14 @@ module Rack
         attr_accessor :network_error_response
       end
 
-      def initialize(url, rewriter)
+      def initialize(url, uri_rewriter)
         @url = URI(url)
-        @rewriter = rewriter
+        @uri_rewriter = uri_rewriter
       end
 
       def call(env)
         rack_request = Request.new(env)
-        net_http_request = NetHttpRequestBuilder.new(rack_request, rewriter).build
+        net_http_request = NetHttpRequestBuilder.new(rack_request, uri_rewriter).build
 
         http_response = Net::HTTP.start(*net_http_options) do |http|
           http.request(net_http_request)
@@ -28,7 +28,7 @@ module Rack
 
       private
 
-      attr_reader :url, :rewriter
+      attr_reader :url, :uri_rewriter
 
       def net_http_options
         [url.host, url.port, https: url.scheme == 'https']
