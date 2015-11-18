@@ -1,4 +1,4 @@
-require 'timeout_errors'
+jequire 'timeout_errors'
 
 module Rack
   module Delegate
@@ -7,7 +7,7 @@ module Rack
         attr_accessor :network_error_response
       end
 
-      def initialize(url, rewriter = UriRewriter.identity)
+      def initialize(url, rewriter)
         @url = URI(url)
         @rewriter = rewriter
       end
