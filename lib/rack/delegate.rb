@@ -6,7 +6,7 @@ require 'rack/delegate/delegator'
 require 'rack/delegate/network_error_response'
 require 'rack/delegate/action'
 require 'rack/delegate/constrained_action'
-require 'rack/delegate/config'
+require 'rack/delegate/configuration'
 require 'rack/delegate/dispatcher'
 
 module Rack

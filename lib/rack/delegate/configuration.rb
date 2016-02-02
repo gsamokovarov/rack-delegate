@@ -1,7 +1,7 @@
 module Rack
   module Delegate
-    class Config < Struct.new(:actions)
-      def self.actions_from_block(&block)
+    class Configuration < Struct.new(:actions)
+      def self.from_block(&block)
         config = new([])
         config.instance_eval(&block)
         config.actions
