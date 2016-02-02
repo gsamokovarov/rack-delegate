@@ -2,7 +2,7 @@ require 'rack'
 
 module Rack
   module Delegate
-    autoload :UriRewriter, 'rack/delegate/uri_rewriter'
+    autoload :Rewriter, 'rack/delegate/rewriter'
     autoload :NetHttpRequestBuilder, 'rack/delegate/net_http_request_builder'
     autoload :Delegator, 'rack/delegate/delegator'
     autoload :NetworkErrorResponse, 'rack/delegate/network_error_response'

@@ -23,7 +23,7 @@ module Rack
       end
 
       def url
-        uri_rewriter.rewrite(rack_request.url)
+        uri_rewriter.rewrite(URI(rack_request.url))
       end
 
       def delegate_rack_headers_to(net_http_request)

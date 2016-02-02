@@ -10,38 +10,35 @@ module Rack
       def initialize
         @actions = []
         @constraints = []
-        @rewriter = UriRewriter.new
-        @changer = NetHttpRequestRewriter.new
+        @rewriter = Rewriter.new
+        @changer = Rewriter.new
       end
 
       def from(pattern, to:, constraints: nil)
-        action = Action.new(pattern, Delegator.new(to, rewriter, changer))
+        action = Action.new(pattern, Delegator.new(to, @rewriter, @changer))
         action = Rack::Timeout.new(action) if timeout?
 
-        if constraints = Array(constraints).concat(@constraints) and !constraints.empty?
-          action = ConstrainedAction.new(action, constraints)
-        end
+        constraints = Array(constraints).concat(@constraints)
+        action = ConstrainedAction.new(action, constraints) unless constraints.empty?
 
         actions << action
       end
 
       def rewrite(&block)
-        @rewriter = UriRewriter.new do |uri|
+        @rewriter = Rewriter.new do |uri|
           uri.instance_eval(&block)
           uri
         end
       end
 
       def change
-        @changer = NetHttpRequestRewriter.new do |request|
+        @changer = Rewriter.new do |request|
           yield request
           request
         end
       end
 
       private
-
-      attr_reader :rewriter, :changer
 
       def constraints(*args)
         @constraints << args.flatten
