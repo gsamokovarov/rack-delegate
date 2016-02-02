@@ -2,9 +2,16 @@ module Rack
   module Delegate
     class Configuration < Struct.new(:actions)
       def self.from_block(&block)
-        config = new([])
+        config = new
         config.instance_eval(&block)
         config.actions
+      end
+
+      def initialize
+        @actions = []
+        @constraints = []
+        @rewriter = UriRewriter.new
+        @changer = NetHttpRequestRewriter.new
       end
 
       def from(pattern, to:, constraints: nil)
@@ -34,16 +41,10 @@ module Rack
 
       private
 
-      def rewriter
-        @rewriter || UriRewriter.new
-      end
-
-      def changer
-        @changer || NetHttpRequestRewriter.new
-      end
+      attr_reader :rewriter, :changer
 
       def constraints(*args)
-        (@constraints ||= []) << args.flatten
+        @constraints << args.flatten
       end
 
       def timeout?
