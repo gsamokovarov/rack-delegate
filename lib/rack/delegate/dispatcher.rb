@@ -31,7 +31,7 @@ module Rack
         end
 
         def from(pattern, to:)
-          action = Action.new(pattern, Delegator.new(to, rewriter))
+          action = Action.new(pattern, Delegator.new(to, rewriter, changer))
           action = Rack::Timeout.new(action) if timeout?
           actions << action
         end
@@ -43,10 +43,21 @@ module Rack
           end
         end
 
+        def change
+          @changer = NetHttpRequestRewriter.new do |request|
+            yield request
+            request
+          end
+        end
+
         private
 
         def rewriter
           @rewriter || UriRewriter.new
+        end
+
+        def changer
+          @changer || NetHttpRequestRewriter.new
         end
 
         def timeout?

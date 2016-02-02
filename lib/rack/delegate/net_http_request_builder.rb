@@ -2,11 +2,13 @@ require 'net/http'
 
 module Rack
   module Delegate
-    class NetHttpRequestBuilder < Struct.new(:rack_request, :uri_rewriter)
+    class NetHttpRequestBuilder < Struct.new(:rack_request, :uri_rewriter, :net_http_request_rewriter)
       def build
         net_http_request_class.new(url).tap do |net_http_request|
           delegate_rack_headers_to(net_http_request)
           delegate_rack_body_to(net_http_request)
+
+          rewrite_net_http_request(net_http_request)
         end
       end
 
@@ -36,6 +38,10 @@ module Rack
         ensure
           rack_request.body.rewind
         end
+      end
+
+      def rewrite_net_http_request(net_http_request)
+        net_http_request_rewriter.rewrite(net_http_request)
       end
 
       def headers_from_rack_request(rack_request)
