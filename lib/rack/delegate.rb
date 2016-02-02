@@ -6,6 +6,7 @@ module Rack
     autoload :NetHttpRequestBuilder, 'rack/delegate/net_http_request_builder'
     autoload :Delegator, 'rack/delegate/delegator'
     autoload :NetworkErrorResponse, 'rack/delegate/network_error_response'
+    autoload :Constraint, 'rack/delegate/constraint'
     autoload :Action, 'rack/delegate/action'
     autoload :ConstrainedAction, 'rack/delegate/constrained_action'
     autoload :Configuration, 'rack/delegate/configuration'

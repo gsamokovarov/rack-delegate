@@ -11,6 +11,10 @@ module Rack
         'REMOTE_ADDR' => '123.123.123.123'
       )
 
+      @@env_to_pass_constraints = Rack::MockRequest.env_for('http://example.com/bar/42', {
+        'REMOTE_ADDR' => '123.123.123.123'
+      })
+
       test 'dispatches requests matching a pattern' do
         request = Rack::Request.new(@@env_to_dispatch)
 
@@ -23,9 +27,24 @@ module Rack
         assert_nil dispatcher.dispatch(request)
       end
 
+      test 'passes over requests not matching constraints' do
+        request = Rack::Request.new(@@env_to_pass_constraints)
+
+        assert_nil dispatcher.dispatch(request)
+      end
+
       def dispatcher
+        nogo = Object.new.instance_eval do
+          def matches?(*)
+            false
+          end
+
+          self
+        end
+
         Dispatcher.configure do
           from %r{\A/foo}, to: 'http://69.69.69.69/'
+          from %r{\A/bar}, to: 'http://69.69.69.69/', constraints: nogo
         end
       end
     end
