@@ -1,16 +1,16 @@
 require 'rack'
 
-require 'rack/delegate/uri_rewriter'
-require 'rack/delegate/net_http_request_builder'
-require 'rack/delegate/delegator'
-require 'rack/delegate/network_error_response'
-require 'rack/delegate/action'
-require 'rack/delegate/constrained_action'
-require 'rack/delegate/configuration'
-require 'rack/delegate/dispatcher'
-
 module Rack
   module Delegate
+    autoload :UriRewriter, 'rack/delegate/uri_rewriter'
+    autoload :NetHttpRequestBuilder, 'rack/delegate/net_http_request_builder'
+    autoload :Delegator, 'rack/delegate/delegator'
+    autoload :NetworkErrorResponse, 'rack/delegate/network_error_response'
+    autoload :Action, 'rack/delegate/action'
+    autoload :ConstrainedAction, 'rack/delegate/constrained_action'
+    autoload :Configuration, 'rack/delegate/configuration'
+    autoload :Dispatcher, 'rack/delegate/dispatcher'
+
     def self.configure(&block)
       dispatcher = Dispatcher.configure(&block)
 
