@@ -1,4 +1,4 @@
-jequire 'timeout_errors'
+require 'timeout_errors'
 
 module Rack
   module Delegate
