@@ -23,6 +23,20 @@ module Rack
         end
       end
 
+      ConstrainedAction = Struct.new(:action, :constraints) do
+        def dispatch(request)
+          if appropriate?(request)
+            action.dispatch(request)
+          end
+        end
+
+        private
+
+        def appropriate?(request)
+          Constraint.new(constraints) === request
+        end
+      end
+
       Config = Struct.new(:actions) do
         def self.actions_from_block(&block)
           config = new([])
@@ -30,10 +44,15 @@ module Rack
           config.actions
         end
 
-        def from(pattern, to:)
+        def from(pattern, to:, constraints: nil)
           action = Action.new(pattern, Delegator.new(to, rewriter, changer))
           action = Rack::Timeout.new(action) if timeout?
-          actions << action
+
+          if constraints = Array(constraints).concat(@constraints) and !constraints.empty?
+            action = ConstrainedAction.new(action, constraints)
+          end
+
+         actions << action
         end
 
         def rewrite(&block)
@@ -58,6 +77,10 @@ module Rack
 
         def changer
           @changer || NetHttpRequestRewriter.new
+        end
+
+        def constraints(*args)
+          (@constraints ||= []) << args.flatten
         end
 
         def timeout?
