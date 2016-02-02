@@ -4,6 +4,9 @@ require 'rack/delegate/uri_rewriter'
 require 'rack/delegate/net_http_request_builder'
 require 'rack/delegate/delegator'
 require 'rack/delegate/network_error_response'
+require 'rack/delegate/action'
+require 'rack/delegate/constrained_action'
+require 'rack/delegate/config'
 require 'rack/delegate/dispatcher'
 
 module Rack
