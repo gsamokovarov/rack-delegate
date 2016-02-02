@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Rack
   module Delegate
-    class UriRewriterTest < Minitest::Test
+    class RewriterTest < Minitest::Test
       @@uri = URI('https://example.com/test/users')
 
       test "rewrites URI's based on an input rule" do
@@ -10,7 +10,7 @@ module Rack
       end
 
       def rewriter
-        UriRewriter.new do |uri|
+        Rewriter.new do |uri|
           uri.path = uri.path.gsub('/test', '')
           uri
         end

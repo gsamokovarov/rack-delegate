@@ -11,7 +11,8 @@ module Rack
       )
 
       @@request = Rack::Request.new(@@env)
-      @@rewriter = UriRewriter.new { |u| u.path = u.path.gsub('/prefix', ''); u }
+      @@uri_rewriter = Rewriter.new { |u| u.path = u.path.gsub('/prefix', ''); u }
+      @@request_rewriter = Rewriter.new
 
       test "delegates all the Rack request headers" do
         assert_equal @@env['HTTP_X_CUSTOM_HEADER'], net_http_request['X-CUSTOM-HEADER']
@@ -26,7 +27,7 @@ module Rack
       end
 
       def net_http_request
-        NetHttpRequestBuilder.new(@@request, @@rewriter).build
+        NetHttpRequestBuilder.new(@@request, @@uri_rewriter, @@request_rewriter).build
       end
     end
   end

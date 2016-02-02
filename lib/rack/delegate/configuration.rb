@@ -1,11 +1,13 @@
 module Rack
   module Delegate
-    class Configuration < Struct.new(:actions)
+    class Configuration
       def self.from_block(&block)
         config = new
         config.instance_eval(&block)
         config.actions
       end
+
+      attr_reader :actions
 
       def initialize
         @actions = []
@@ -21,7 +23,7 @@ module Rack
         constraints = Array(constraints).concat(@constraints)
         action = ConstrainedAction.new(action, constraints) unless constraints.empty?
 
-        actions << action
+        @actions << action
       end
 
       def rewrite(&block)
