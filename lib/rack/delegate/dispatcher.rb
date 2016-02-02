@@ -50,12 +50,10 @@ module Rack
         end
 
         def timeout?
-          begin
-            require 'rack/timeout'
-            true
-          rescue LoadError
-            false
-          end
+          require 'rack/timeout'
+          true
+        rescue LoadError
+          false
         end
       end
     end
