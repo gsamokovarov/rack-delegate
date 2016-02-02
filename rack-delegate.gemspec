@@ -1,6 +1,6 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'rack/delegate/version'
 
 Gem::Specification.new do |spec|
@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Genadi Samokovarov"]
   spec.email         = ["gsamokovarov@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = "Rack level reverse proxy."
+  spec.description   = "Rack level reverse proxy."
   spec.homepage      = "https://github.com/gsamokovarov/rack-delegate"
   spec.license       = "MIT"
 
