@@ -81,7 +81,6 @@ end
 ![but](https://raw.githubusercontent.com/gsamokovarov/rack-delegate/master/.but.jpg)
 
 If you wanna go the (micro) services route, you can do it quickly with Ruby and
-prototype. Even if you do, you may as well need a better API gateway than this
-one. [OpenResty] may be useful for you.
+prototype. If you need the speed, you can check out [OpenResty].
 
 [OpenResty]: https://openresty.org/
