@@ -80,13 +80,8 @@ end
 
 ![but](https://raw.githubusercontent.com/gsamokovarov/rack-delegate/master/.but.jpg)
 
-A question well asked, dear sir! Going micro-services early may bite you. Going
-micro-services for the sake of it may bite you. Going micro-services, because
-you can't manage that shitty app, well... may result in shitty services as
-well.
-
-Anyway, if you wanna go that route, you can do it quickly with Ruby and
-prototype. And if you do, you may as well need a better API gateway than this
+If you wanna go the (micro) services route, you can do it quickly with Ruby and
+prototype. Even if you do, you may as well need a better API gateway than this
 one. [OpenResty] may be useful for you.
 
 [OpenResty]: https://openresty.org/
