@@ -11,9 +11,9 @@ module Rack
         'REMOTE_ADDR' => '123.123.123.123'
       )
 
-      @@env_to_pass_constraints = Rack::MockRequest.env_for('http://example.com/bar/42', {
+      @@env_to_pass_constraints = Rack::MockRequest.env_for('http://example.com/bar/42',
         'REMOTE_ADDR' => '123.123.123.123'
-      })
+      )
 
       test 'dispatches requests matching a pattern' do
         request = Rack::Request.new(@@env_to_dispatch)
@@ -35,10 +35,8 @@ module Rack
 
       def dispatcher
         nogo = Object.new.instance_eval do
-          def matches?(*)
-            false
-          end
-
+          random_method_name, _ = [:matches?, :call, :===].sample(1)
+          define_singleton_method(random_method_name) { |*| false }
           self
         end
 

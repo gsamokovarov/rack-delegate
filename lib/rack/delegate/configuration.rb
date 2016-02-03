@@ -42,8 +42,8 @@ module Rack
 
       private
 
-      def constraints(*args)
-        @constraints << args.flatten
+      def constraints(*args, &block)
+        @constraints << args.flatten << block
       end
 
       def timeout?
