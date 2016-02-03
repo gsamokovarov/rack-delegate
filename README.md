@@ -76,9 +76,9 @@ module Macro
 end
 ```
 
-## Why?
+## Why
 
-![but](https://raw.githubusercontent.com/gsamokovarov/rack-delegate/master/.but.gif)
+![but](https://raw.githubusercontent.com/gsamokovarov/rack-delegate/master/.but.jpg)
 
 A question well asked, dear sir! Going micro-services early may bite you. Going
 micro-services for the sake of it may bite you. Going micro-services, because
