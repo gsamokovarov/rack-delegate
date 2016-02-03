@@ -14,10 +14,11 @@ module Rack
         @constraints = []
         @rewriter = Rewriter.new
         @changer = Rewriter.new
+        @timeout = NetworkErrorResponse
       end
 
       def from(pattern, to:, constraints: nil)
-        action = Action.new(pattern, Delegator.new(to, @rewriter, @changer))
+        action = Action.new(pattern, Delegator.new(to, @rewriter, @changer, @timeout))
         action = Rack::Timeout.new(action) if timeout?
 
         constraints = Array(constraints).concat(@constraints)
@@ -38,6 +39,11 @@ module Rack
           yield request
           request
         end
+      end
+
+      def timeout(response_object = nil, &block)
+        @timeout = response_object if response_object
+        @timeout = block if block
       end
 
       private

@@ -3,14 +3,11 @@ require 'timeout_errors'
 module Rack
   module Delegate
     class Delegator
-      class << self
-        attr_accessor :network_error_response
-      end
-
-      def initialize(url, uri_rewriter, net_http_request_rewriter)
+      def initialize(url, uri_rewriter, net_http_request_rewriter, timeout_response)
         @url = URI(url)
         @uri_rewriter = uri_rewriter
         @net_http_request_rewriter = net_http_request_rewriter
+        @timeout_response = timeout_response
       end
 
       def call(env)
@@ -23,18 +20,13 @@ module Rack
 
         convert_to_rack_response(http_response)
       rescue TimeoutErrors
-        # TODO: Should I let the error in as an input?
-        network_error_response.call(env)
+        @timeout_response.call(env)
       end
 
       private
 
       def net_http_options
         [@url.host, @url.port, https: @url.scheme == 'https']
-      end
-
-      def network_error_response
-        self.class.network_error_response ||= NetworkErrorResponse
       end
 
       def convert_to_rack_response(http_response)

@@ -12,6 +12,11 @@ module Rack
     autoload :Configuration, 'rack/delegate/configuration'
     autoload :Dispatcher, 'rack/delegate/dispatcher'
 
+    class << self
+      attr_accessor :network_error_response
+    end
+    self.network_error_response = NetworkErrorResponse
+
     def self.configure(&block)
       dispatcher = Dispatcher.configure(&block)
 
