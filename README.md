@@ -6,7 +6,7 @@ Heroku's, and what-not-fancy-cloud-services, without a bit of complications.
 
 The proxy can sit after the request authentication, or before it, depending on
 the services you have to route requests to. You can rewrite requests URLs, and
-even the whole `Net::HTTP::Reqest` to be sent out.
+the whole `Net::HTTPRequest` to be sent out.
 
 ## Installation
 
@@ -48,13 +48,15 @@ module Macro
 end
 ```
 
+---
+
 Wait, what happened? `Rack::Delegate.configure` created a class, we can use as
 an middleware. The configuration is based on a DSL, you can check it out
 [here][DSL].
 
 In the example above, we said:
 
-* Rewrite the incoming requests URL and strip the leading /api out of them,
+* Rewrite the incoming requests URL and strip the leading `/api` out of them,
   before sending them off to the service that will handle them. The block of
   `rewrite` is an `instance_eval` of an `URI` object. You can call all the
   methods on `URI`.
@@ -65,7 +67,7 @@ In the example above, we said:
   as an input. If you pass it a block, that block becomes a constraint.
 
 * Proxy requests matching a path of `/api/users` to
-  `http://users-service.intern`.  Because we have setup an rewrite rule, we
+  `http://users-service.intern`.  Because we have setup a rewrite rule, we
   will hit `http://users-service.intern/users` and not
   `http://users-service.intern/api/users`
 
@@ -104,3 +106,4 @@ prototype. If you need the speed, you can check out [OpenResty].
 
 [OpenResty]: https://openresty.org/
 [DSL]: https://github.com/gsamokovarov/rack-delegate/blob/v0.2.0/lib/rack/delegate/configuration.rb
+[URI]: http://ruby-doc.org/stdlib-2.3.0/libdoc/uri/rdoc/URI.html
