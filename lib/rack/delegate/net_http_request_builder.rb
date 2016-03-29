@@ -3,6 +3,11 @@ require 'net/http'
 module Rack
   module Delegate
     class NetHttpRequestBuilder < Struct.new(:rack_request, :uri_rewriter, :net_http_request_rewriter)
+      CONTENT_HEADERS = %w(
+        CONTENT_LENGTH
+        CONTENT_TYPE
+      ).freeze
+
       def build
         net_http_request_class.new(url).tap do |net_http_request|
           delegate_rack_headers_to(net_http_request)
@@ -46,7 +51,7 @@ module Rack
 
       def headers_from_rack_request(rack_request)
         rack_request.env
-          .select  { |key, _| key.start_with?('HTTP_') }
+          .select  { |key, _| key.start_with?('HTTP_') || CONTENT_HEADERS.include?(key) }
           .collect { |key, value| [key.sub(/^HTTP_/, '').tr('_', '-'), value] }
       end
     end
