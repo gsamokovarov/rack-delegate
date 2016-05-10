@@ -40,6 +40,10 @@ module Rack
       def normalize_headers_for(http_response)
         http_response.to_hash.tap do |headers|
           headers.delete('status')
+
+          # Since Ruby 2.1 Net::HTTPHeader#to_hash returns the value as an
+          # array of values and not a string. Try to coerce it for 2.0 support.
+          headers.each { |header, value| headers[header] = Array(value).join('; ') }
         end
       end
     end
