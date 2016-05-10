@@ -40,6 +40,9 @@ module Rack
       def normalize_headers_for(http_response)
         http_response.to_hash.tap do |headers|
           headers.delete('status')
+          headers.each do |k,v|
+            headers[k] = v.join('; ')
+          end
         end
       end
     end
