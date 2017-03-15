@@ -25,6 +25,14 @@ module Rack
         assert_equal @@env['CONTENT_LENGTH'], net_http_request['CONTENT-LENGTH']
       end
 
+      test "ignores the HTTP_HOST header" do
+        assert_nil net_http_request['HOST']
+      end
+
+      test "ignores HTTP_CONNECTION header" do
+        assert_nil net_http_request['CONNECTION']
+      end
+
       test "delegates the Rack request body" do
         assert_equal '42', net_http_request.body
       end
