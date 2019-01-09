@@ -3,16 +3,16 @@ require 'timeout_errors'
 module Rack
   module Delegate
     class Delegator
-      def initialize(url, uri_rewriter, net_http_request_rewriter, timeout_response)
+      def initialize(url, uri_rewriters, net_http_request_rewriter, timeout_response)
         @url = URI(url)
-        @uri_rewriter = uri_rewriter
+        @uri_rewriters = uri_rewriters
         @net_http_request_rewriter = net_http_request_rewriter
         @timeout_response = timeout_response
       end
 
       def call(env)
         rack_request = Request.new(env)
-        net_http_request = NetHttpRequestBuilder.new(rack_request, @uri_rewriter, @net_http_request_rewriter).build
+        net_http_request = NetHttpRequestBuilder.new(rack_request, @uri_rewriters, @net_http_request_rewriter).build
         http_response = Net::HTTP.start(*net_http_options) do |http|
           http.request(net_http_request)
         end

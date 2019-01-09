@@ -1,3 +1,4 @@
+require 'pry'
 module Rack
   module Delegate
     class Configuration
@@ -18,12 +19,11 @@ module Rack
       end
 
       def from(pattern, to:, constraints: nil, rewrite: nil)
-        rewriter = nil
+        action_rewriter = nil
         unless rewrite.nil?
-          rewriter = rewrite(&rewrite)
+          action_rewriter = make_rewriter(&rewrite)
         end
-        puts "Rewriter: #{rewriter}"
-        action = Action.new(pattern, Delegator.new(to, rewriter, @changer, @timeout))
+        action = Action.new(pattern, Delegator.new(to, [@rewriter, action_rewriter], @changer, @timeout))
         action = Rack::Timeout.new(action) if timeout?
 
         constraints = Array(constraints).concat(@constraints)
@@ -33,10 +33,7 @@ module Rack
       end
 
       def rewrite(&block)
-        @rewriter = Rewriter.new do |uri|
-          uri.instance_eval(&block)
-          uri
-        end
+        @rewriter = make_rewriter(&block);
         @rewriter
       end
 
@@ -63,6 +60,14 @@ module Rack
         true
       rescue LoadError
         false
+      end
+
+      private
+      def make_rewriter(&block)
+        Rewriter.new do |uri|
+          uri.instance_eval(&block)
+          uri
+        end
       end
     end
   end
