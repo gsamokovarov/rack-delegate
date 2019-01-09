@@ -17,8 +17,13 @@ module Rack
         @timeout = NetworkErrorResponse
       end
 
-      def from(pattern, to:, constraints: nil)
-        action = Action.new(pattern, Delegator.new(to, @rewriter, @changer, @timeout))
+      def from(pattern, to:, constraints: nil, rewrite: nil)
+        rewriter = nil
+        unless rewrite.nil?
+          rewriter = rewrite(&rewrite)
+        end
+        puts "Rewriter: #{rewriter}"
+        action = Action.new(pattern, Delegator.new(to, rewriter, @changer, @timeout))
         action = Rack::Timeout.new(action) if timeout?
 
         constraints = Array(constraints).concat(@constraints)
@@ -32,6 +37,7 @@ module Rack
           uri.instance_eval(&block)
           uri
         end
+        @rewriter
       end
 
       def change

@@ -23,7 +23,6 @@ module Rack
       Struct.new(:app) do
         define_method :call do |env|
           request = Request.new(env)
-
           if action = dispatcher.dispatch(request)
             action.call(env)
           else
