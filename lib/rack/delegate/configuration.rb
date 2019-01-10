@@ -20,10 +20,11 @@ module Rack
 
       def from(pattern, to:, constraints: nil, rewrite: nil)
         action_rewriter = nil
+        rewriters = [@rewriter]
         unless rewrite.nil?
-          action_rewriter = make_rewriter(&rewrite)
+          rewriters << make_rewriter(&rewrite)
         end
-        action = Action.new(pattern, Delegator.new(to, [@rewriter, action_rewriter], @changer, @timeout))
+        action = Action.new(pattern, Delegator.new(to, rewriters, @changer, @timeout))
         action = Rack::Timeout.new(action) if timeout?
 
         constraints = Array(constraints).concat(@constraints)
