@@ -31,7 +31,6 @@ module Rack
       def url
         url = URI(rack_request.url)
         uri_rewriters.each do |rewriter|
-          binding.pry
           url = rewriter.rewrite(url)
         end
         url
